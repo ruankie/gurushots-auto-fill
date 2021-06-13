@@ -55,7 +55,8 @@ def go_to_home_page():
     go to page GuruShots home page
     '''
     driver.get('https://gurushots.com/')
-    driver.fullscreen_window()
+    #driver.fullscreen_window()
+    driver.set_window_size(1920, 1080)
 
 
 def go_to_challenges_page():
@@ -63,7 +64,8 @@ def go_to_challenges_page():
     go to page that contains currently enrolled challenges
     '''
     driver.get('https://gurushots.com/challenges/my-challenges/current')
-    driver.fullscreen_window()   
+    #driver.fullscreen_window() 
+    driver.set_window_size(1920, 1080)  
 
 
 def log_in(email, password):
