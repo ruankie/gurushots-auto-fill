@@ -1,7 +1,7 @@
 ##############################################################################################
 ## Author:           Ruan Pretorius                                                         ##
 ## GitHub:           https://github.com/ruankie                                             ##
-## Last Updated:     8 June 2021                                                            ##
+## Last Updated:     13 June 2021                                                            ##
 ## Disclaimer:       This is for website testing and educational purposes only.             ##
 ##                   This programme was intended for users to learn how the Selenium        ##
 ##                   library works in the Python environment while exposing users to        ##
@@ -20,13 +20,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 from credentials import my_email_address, my_password
 import numpy as np
 
 
-#####################
-## define consants ##
-#####################
+#########################
+## consants and config ##
+#########################
 CHROMEDRIVER_PATH = 'C:/Program Files (x86)/chromedriver.exe' # location of driver
 LOGIN_WAIT = 15 # max time to wait for login elements to load
 IMPLICIT_WAIT = 5 # implicit wait time
@@ -34,8 +35,16 @@ LOW_WAIT_TIME_BETWEEN_CHALLENGES = 4.0 # lower limit of wait time between fillin
 HIGH_WAIT_TIME_BETWEEN_CHALLENGES = 10.0 # upper limit of wait time between filling chllenges
 LOW_WAIT_TIME_BETWEEN_VOTES = 0.05 # lower limit of wait time between voting for photos
 HIGH_WAIT_TIME_BETWEEN_VOTES = 0.5 # upper limit of wait time between voting for photos
-FILL_THRESHOLD = 75.0 # only vote if exposure less than this
-driver = webdriver.Chrome(CHROMEDRIVER_PATH) # load driver
+FILL_THRESHOLD = 85.0 # only vote if exposure less than this
+BOOST = True # whether ot not to boost where free boosts are available
+HEADLESS = False # whether or not to run Chrome headless
+if HEADLESS:
+    options = Options()
+    options.headless = True
+    driver = webdriver.Chrome(CHROMEDRIVER_PATH, chrome_options=options) # load driver
+else:
+    driver = webdriver.Chrome(CHROMEDRIVER_PATH) # load driver
+
 
 
 ######################
@@ -140,6 +149,35 @@ def fill_exposure(challenge_nb=0):
         go_to_challenges_page()
 
 
+def boost_available():
+    '''
+    find all available boosts and boost most pupular image for given challenge
+    '''
+    try:
+        # find available boosts
+        driver.implicitly_wait(IMPLICIT_WAIT)
+        boosts_abailable = driver.find_elements_by_class_name("challenge-action-button__content__boost-state__available")
+        nb_boosts_abailable = len(boosts_abailable)
+        print(f'{nb_boosts_abailable} available boosts found.')
+
+        # loop through available boosts and boost most pupular image
+        for i, boost_button in enumerate(boosts_abailable):
+            print(f'\tboosting {i+1}/{nb_boosts_abailable}...')
+            # click boost
+            boost_button.click()
+            driver.implicitly_wait(IMPLICIT_WAIT)
+
+            # click on left-most picture
+            left_image = driver.find_element_by_xpath("//md-dialog-content/div[2]/div[3]/div[1]")
+            left_image.click()
+            driver.implicitly_wait(IMPLICIT_WAIT)
+
+    except Exception as e:
+        print('\t*** ERROR: ',e)
+        go_to_challenges_page()
+
+
+
 ####################
 ## main execution ##
 ####################
@@ -165,10 +203,14 @@ if __name__ == '__main__':
 
     # fill exposure meters
     nb_vote_buttons = len(unfilled_meters_idxs)
-    for k in unfilled_meters_idxs:
+    for i, idx in enumerate(unfilled_meters_idxs):
         time.sleep(np.random.randint(low=LOW_WAIT_TIME_BETWEEN_CHALLENGES, high=HIGH_WAIT_TIME_BETWEEN_CHALLENGES)) # to keep request frequency low and realism high
-        print(f'filling challenge {k}/{nb_vote_buttons}...')
-        fill_exposure(challenge_nb=k)
+        print(f'filling challenge {i+1}/{nb_vote_buttons}...')
+        fill_exposure(challenge_nb=idx)
+
+    # boost all available
+    if BOOST:
+        boost_available()
 
     # wait for a second
     time.sleep(1)

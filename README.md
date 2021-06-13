@@ -6,7 +6,7 @@ GuruShots is a platform that enables users from around the globe to enter photog
 # How to Use
 ## Prerequisites
 Ensure that you have `Selenium`, `Google Chrome`, and `ChromeDriver` installed on your machine. If not, follow these steps:
-1. Run `pip install selenium` from your terminal to install Selenium.
+1. Run `pip install selenium` from your terminal to install Selenium **OR** `pip install -r requirements.txt` to install correct versions of all depedencies.
 2. Download and install Google Chrome web browser from [here](https://www.google.com/chrome/).
 3. Download ChromeDriver driver for your version of Google Chrome [here](https://sites.google.com/a/chromium.org/chromedriver/downloads).
 4. Move the `chromedriver.exe` file that was downloaded in step *3* to `C:\Program Files (x86)\` **OR** change the path of `chromedriver.exe` inside the `python auto_fill.py` file to the relevant location on your machine.
