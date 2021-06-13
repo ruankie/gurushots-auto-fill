@@ -28,7 +28,7 @@ import numpy as np
 #########################
 ## consants and config ##
 #########################
-CHROMEDRIVER_PATH = 'C:/Program Files (x86)/chromedriver.exe' # location of driver
+CHROMEDRIVER_PATH = '/usr/bin/chromedriver' # location of driver
 LOGIN_WAIT = 15 # max time to wait for login elements to load
 IMPLICIT_WAIT = 5 # implicit wait time
 LOW_WAIT_TIME_BETWEEN_CHALLENGES = 4.0 # lower limit of wait time between filling chllenges
