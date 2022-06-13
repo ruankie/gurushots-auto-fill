@@ -1,3 +1,7 @@
+![GitHub contributors](https://img.shields.io/github/contributors/ruankie/gurushots-auto-fill) 
+![GitHub last commit](https://img.shields.io/github/last-commit/ruankie/gurushots-auto-fill)
+![GitHub Repo stars](https://img.shields.io/github/stars/ruankie/gurushots-auto-fill?style=social)
+
 # Description
 This programme uses Python along with [Selenium](https://www.selenium.dev/documentation/en/) to automate the tedious *exposure filling* process on [GuruShots](https://gurushots.com/). 
 
