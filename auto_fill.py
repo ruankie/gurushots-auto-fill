@@ -143,8 +143,8 @@ def fill_exposure(challenge_nb=0):
 
         # close vote window
         driver.implicitly_wait(IMPLICIT_WAIT)
-        close_button = driver.find_element("xpath", "//*[@id='gs-app-main']/gs-modals/div/modal-vote/div[4]/div/div[2]/div[2]")
-        close_button.click()
+        done_button = driver.find_element("xpath", '//*[@id="gs-app-main"]/div/gs-modals/div/modal-vote/div[4]/div/div[2]/div[2]')
+        done_button.click()
 
     except Exception as e:
         print('\t*** ERROR: ',e)
