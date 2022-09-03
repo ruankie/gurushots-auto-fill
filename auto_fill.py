@@ -6,7 +6,7 @@
 ##                   This programme was intended for users to learn how the Selenium        ##
 ##                   library works in the Python environment while exposing users to        ##
 ##                   online photography competitions. The author will not be held           ##
-##                   responsible for any misuse of tihs code.                               ##
+##                   responsible for any misuse of this code.                               ##
 ##############################################################################################
 
 
@@ -31,8 +31,8 @@ import numpy as np
 CHROMEDRIVER_PATH = '/usr/bin/chromedriver' # location of driver
 LOGIN_WAIT = 15 # max time to wait for login elements to load
 IMPLICIT_WAIT = 5 # implicit wait time
-LOW_WAIT_TIME_BETWEEN_CHALLENGES = 4.0 # lower limit of wait time between filling chllenges
-HIGH_WAIT_TIME_BETWEEN_CHALLENGES = 10.0 # upper limit of wait time between filling chllenges
+LOW_WAIT_TIME_BETWEEN_CHALLENGES = 4.0 # lower limit of wait time between filling challenges
+HIGH_WAIT_TIME_BETWEEN_CHALLENGES = 10.0 # upper limit of wait time between filling challenges
 LOW_WAIT_TIME_BETWEEN_VOTES = 0.05 # lower limit of wait time between voting for photos
 HIGH_WAIT_TIME_BETWEEN_VOTES = 0.5 # upper limit of wait time between voting for photos
 FILL_THRESHOLD = 85.0 # only vote if exposure less than this
@@ -40,7 +40,10 @@ BOOST = True # whether ot not to boost where free boosts are available
 HEADLESS = False # whether or not to run Chrome headless
 if HEADLESS:
     options = Options()
-    options.headless = True
+    # options.headless = True
+    options.add_argument('--no-sandbox')
+    options.add_argument("--headless")
+    options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36")
     driver = webdriver.Chrome(CHROMEDRIVER_PATH, chrome_options=options) # load driver
 else:
     driver = webdriver.Chrome(CHROMEDRIVER_PATH) # load driver
@@ -56,7 +59,7 @@ def go_to_home_page():
     '''
     driver.get('https://gurushots.com/')
     #driver.fullscreen_window()
-    driver.set_window_size(1280, 1024)
+    # driver.set_window_size(1280, 1024)
 
 
 def go_to_challenges_page():
@@ -65,7 +68,7 @@ def go_to_challenges_page():
     '''
     driver.get('https://gurushots.com/challenges/my-challenges/current')
     #driver.fullscreen_window() 
-    driver.set_window_size(1280, 1024)
+    # driver.set_window_size(1280, 1024)
 
 
 def log_in(email, password):
@@ -104,7 +107,7 @@ def fill_exposure(challenge_nb=0):
     fill exposure of specific challenge
     '''    
     driver.implicitly_wait(IMPLICIT_WAIT)
-    vote_buttons = driver.find_elements_by_xpath("//div[@ng-click='$ctrl.vote()']")
+    vote_buttons = driver.find_elements("xpath", "//div[@ng-click='$ctrl.vote()']")
 
     try:
         # click on challenge vote button
@@ -114,7 +117,7 @@ def fill_exposure(challenge_nb=0):
 
         # click LET'S GO button
         driver.implicitly_wait(IMPLICIT_WAIT)
-        lets_go_button = driver.find_element_by_xpath("//div[text()=" + "\"LET'S GO\"" + "]")
+        lets_go_button = driver.find_element("xpath", "//div[text()=" + "\"LET'S GO\"" + "]")
         lets_go_button.click()
 
         # click 3 photos until exposure meter is full
@@ -123,12 +126,12 @@ def fill_exposure(challenge_nb=0):
         while not exposure_filled:
             # check if exposure full
             driver.implicitly_wait(IMPLICIT_WAIT)
-            exposure_meter = driver.find_element_by_xpath("//div[@class='modal-vote__exposure-meter__arrow']")
+            exposure_meter = driver.find_element("xpath", "//div[@class='modal-vote__exposure-meter__arrow']")
             rotation = float(exposure_meter.get_attribute('style').split('rotate(')[1].split('deg)')[0])
             if rotation < 90.0:
                 for i in range(last_photo_voted, last_photo_voted+3):
                     driver.implicitly_wait(IMPLICIT_WAIT)
-                    photo = driver.find_element_by_xpath(f"//div[@id='vote-photo-{i}']")
+                    photo = driver.find_element("xpath", f"//div[@id='vote-photo-{i}']")
                     time.sleep(np.round(np.random.uniform(low=0.05, high=0.5),2)) # wait between photo clicks for realism
                     photo.click()
                     last_photo_voted += 1
@@ -138,13 +141,13 @@ def fill_exposure(challenge_nb=0):
 
         # click submit vote
         driver.implicitly_wait(IMPLICIT_WAIT)
-        submit_vote_button = driver.find_element_by_xpath("//span[text()='SUBMIT VOTE']")
+        submit_vote_button = driver.find_element("xpath", "//span[text()='SUBMIT VOTE']")
         submit_vote_button.click()
 
         # close vote window
         driver.implicitly_wait(IMPLICIT_WAIT)
-        close_button = driver.find_element_by_xpath("//*[@id='gs-app-main']/gs-modals/div/modal-vote/div[4]/div/div[2]/div[2]")
-        close_button.click()
+        done_button = driver.find_element("xpath", '//*[@id="gs-app-main"]/div/gs-modals/div/modal-vote/div[4]/div/div[2]/div[2]')
+        done_button.click()
 
     except Exception as e:
         print('\t*** ERROR: ',e)
@@ -158,11 +161,11 @@ def boost_available():
     try:
         # find available boosts
         driver.implicitly_wait(IMPLICIT_WAIT)
-        boosts_abailable = driver.find_elements_by_class_name("challenge-action-button__content__boost-state__available")
+        boosts_abailable = driver.find_elements("class", "challenge-action-button__content__boost-state__available")
         nb_boosts_abailable = len(boosts_abailable)
         print(f'{nb_boosts_abailable} available boosts found.')
 
-        # loop through available boosts and boost most pupular image
+        # loop through available boosts and boost most popular image
         for i, boost_button in enumerate(boosts_abailable):
             print(f'\tboosting {i+1}/{nb_boosts_abailable}...')
             # click boost
@@ -170,7 +173,7 @@ def boost_available():
             driver.implicitly_wait(IMPLICIT_WAIT)
 
             # click on left-most picture
-            left_image = driver.find_element_by_xpath("//md-dialog-content/div[2]/div[3]/div[1]")
+            left_image = driver.find_element("xpath", "//md-dialog-content/div[2]/div[3]/div[1]")
             left_image.click()
             driver.implicitly_wait(IMPLICIT_WAIT)
 
@@ -192,8 +195,9 @@ if __name__ == '__main__':
     log_in(my_email_address, my_password)
 
     # check exposure meters of active challenges
+    print('looking for unfilled exposure meters...')
     driver.implicitly_wait(IMPLICIT_WAIT)
-    exposure_meters = driver.find_elements_by_xpath("//div[@class='c-challenges-item__exposure__meter__arrow']")
+    exposure_meters = driver.find_elements("xpath", "//div[@class='c-challenges-item__exposure__meter__arrow']")
     print(f'{len(exposure_meters)} active challenges found.')
 
     # add challenge id to list if exposure meter below threshold
