@@ -28,19 +28,22 @@ import numpy as np
 #########################
 ## consants and config ##
 #########################
-CHROMEDRIVER_PATH = 'C:\\Users\\Ruan Pretorius\\Downloads\\Chromedriver\\105\\chromedriver.exe' # location of driver
+CHROMEDRIVER_PATH = '/usr/bin/chromedriver' # location of driver
 LOGIN_WAIT = 15 # max time to wait for login elements to load
 IMPLICIT_WAIT = 5 # implicit wait time
-LOW_WAIT_TIME_BETWEEN_CHALLENGES = 1.0 # lower limit of wait time between filling challenges
-HIGH_WAIT_TIME_BETWEEN_CHALLENGES = 2.0 # upper limit of wait time between filling challenges
+LOW_WAIT_TIME_BETWEEN_CHALLENGES = 4.0 # lower limit of wait time between filling challenges
+HIGH_WAIT_TIME_BETWEEN_CHALLENGES = 10.0 # upper limit of wait time between filling challenges
 LOW_WAIT_TIME_BETWEEN_VOTES = 0.05 # lower limit of wait time between voting for photos
-HIGH_WAIT_TIME_BETWEEN_VOTES = 0.1 # upper limit of wait time between voting for photos
+HIGH_WAIT_TIME_BETWEEN_VOTES = 0.5 # upper limit of wait time between voting for photos
 FILL_THRESHOLD = 85.0 # only vote if exposure less than this
-BOOST = False # whether ot not to boost where free boosts are available
-HEADLESS = False # whether or not to run Chrome headless
+BOOST = True # whether ot not to boost where free boosts are available
+HEADLESS = True # whether or not to run Chrome headless
 if HEADLESS:
     options = Options()
-    options.headless = True
+    # options.headless = True
+    options.add_argument('--no-sandbox')
+    options.add_argument("--headless")
+    options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36")
     driver = webdriver.Chrome(CHROMEDRIVER_PATH, chrome_options=options) # load driver
 else:
     driver = webdriver.Chrome(CHROMEDRIVER_PATH) # load driver
@@ -56,7 +59,7 @@ def go_to_home_page():
     '''
     driver.get('https://gurushots.com/')
     #driver.fullscreen_window()
-    driver.set_window_size(1280, 1024)
+    # driver.set_window_size(1280, 1024)
 
 
 def go_to_challenges_page():
@@ -65,7 +68,7 @@ def go_to_challenges_page():
     '''
     driver.get('https://gurushots.com/challenges/my-challenges/current')
     #driver.fullscreen_window() 
-    driver.set_window_size(1280, 1024)
+    # driver.set_window_size(1280, 1024)
 
 
 def log_in(email, password):
@@ -158,7 +161,7 @@ def boost_available():
     try:
         # find available boosts
         driver.implicitly_wait(IMPLICIT_WAIT)
-        boosts_abailable = driver.find_elements_by_class_name("challenge-action-button__content__boost-state__available")
+        boosts_abailable = driver.find_elements("class", "challenge-action-button__content__boost-state__available")
         nb_boosts_abailable = len(boosts_abailable)
         print(f'{nb_boosts_abailable} available boosts found.')
 
