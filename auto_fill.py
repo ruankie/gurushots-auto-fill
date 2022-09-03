@@ -6,7 +6,7 @@
 ##                   This programme was intended for users to learn how the Selenium        ##
 ##                   library works in the Python environment while exposing users to        ##
 ##                   online photography competitions. The author will not be held           ##
-##                   responsible for any misuse of tihs code.                               ##
+##                   responsible for any misuse of this code.                               ##
 ##############################################################################################
 
 
@@ -31,8 +31,8 @@ import numpy as np
 CHROMEDRIVER_PATH = 'C:\\Users\\Ruan Pretorius\\Downloads\\Chromedriver\\105\\chromedriver.exe' # location of driver
 LOGIN_WAIT = 15 # max time to wait for login elements to load
 IMPLICIT_WAIT = 5 # implicit wait time
-LOW_WAIT_TIME_BETWEEN_CHALLENGES = 1.0 # lower limit of wait time between filling chllenges
-HIGH_WAIT_TIME_BETWEEN_CHALLENGES = 2.0 # upper limit of wait time between filling chllenges
+LOW_WAIT_TIME_BETWEEN_CHALLENGES = 1.0 # lower limit of wait time between filling challenges
+HIGH_WAIT_TIME_BETWEEN_CHALLENGES = 2.0 # upper limit of wait time between filling challenges
 LOW_WAIT_TIME_BETWEEN_VOTES = 0.05 # lower limit of wait time between voting for photos
 HIGH_WAIT_TIME_BETWEEN_VOTES = 0.1 # upper limit of wait time between voting for photos
 FILL_THRESHOLD = 85.0 # only vote if exposure less than this
@@ -162,7 +162,7 @@ def boost_available():
         nb_boosts_abailable = len(boosts_abailable)
         print(f'{nb_boosts_abailable} available boosts found.')
 
-        # loop through available boosts and boost most pupular image
+        # loop through available boosts and boost most popular image
         for i, boost_button in enumerate(boosts_abailable):
             print(f'\tboosting {i+1}/{nb_boosts_abailable}...')
             # click boost
