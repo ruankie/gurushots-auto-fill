@@ -37,7 +37,7 @@ LOW_WAIT_TIME_BETWEEN_VOTES = 0.05 # lower limit of wait time between voting for
 HIGH_WAIT_TIME_BETWEEN_VOTES = 0.5 # upper limit of wait time between voting for photos
 FILL_THRESHOLD = 85.0 # only vote if exposure less than this
 BOOST = True # whether ot not to boost where free boosts are available
-HEADLESS = True # whether or not to run Chrome headless
+HEADLESS = False # whether or not to run Chrome headless
 if HEADLESS:
     options = Options()
     # options.headless = True
